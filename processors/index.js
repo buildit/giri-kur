@@ -29,6 +29,7 @@ const processors = {
 };
 
 const process = node => {
+  console.log(node);
   const n = node.node ? node.node : node; // Seriously?  This is a thing we have to do?
   let returnValue;
   if (processors[n.type]) {
