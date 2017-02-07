@@ -1,3 +1,3 @@
-export const processId = id => {
-  return `#${id.value[0].value}`;
-}
+const processId = id => (`#${id.value[0].value}`);
+
+export default processId;

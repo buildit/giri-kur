@@ -1,3 +1,3 @@
-export const processClass = classNode => {
-  return `.${classNode.value[0].value}`;
-}
+const processClass = classNode => (`.${classNode.value[0].value}`);
+
+export default processClass;

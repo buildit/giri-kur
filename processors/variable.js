@@ -1,1 +1,3 @@
-export const processVariable = variable => (`$${variable.value}`);
+const processVariable = variable => (`$${variable.value}`);
+
+export default processVariable;

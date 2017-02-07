@@ -1,10 +1,5 @@
 import process from './index';
 
-export const processValue = value => {
-  const values = trim(value.value);
-  return values.reduce((t, v) => ( t + process(v)), '');
-}
-
 const stripLeadingSpaces = collection => {
   let somethingFound = false;
   const finalCollection = [];
@@ -21,16 +16,22 @@ const stripLeadingSpaces = collection => {
     }
   });
   return finalCollection;
-}
+};
 const stripTrailingSpaces = collection => {
   collection.reverse();
-  let finalCollection = stripLeadingSpaces(collection);
+  const finalCollection = stripLeadingSpaces(collection);
   finalCollection.reverse();
   return finalCollection;
-}
-
+};
 const trim = collection => {
   let workingCollection = stripLeadingSpaces(collection);
   workingCollection = stripTrailingSpaces(workingCollection);
   return workingCollection;
-}
+};
+
+const processValue = value => {
+  const values = trim(value.value);
+  return values.reduce((t, v) => (t + process(v)), '');
+};
+
+export default processValue;

@@ -1,3 +1,3 @@
-export const processOperator = operator => {
-  return operator.value;
-}
+const processOperator = operator => (operator.value);
+
+export default processOperator;

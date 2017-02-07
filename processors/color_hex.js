@@ -1,1 +1,3 @@
-export const processColorHex = hex => ( `#${hex.value}` );
+const processColorHex = hex => (`#${hex.value}`);
+
+export default processColorHex;

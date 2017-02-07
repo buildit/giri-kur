@@ -1,3 +1,3 @@
-export const processIdentifier = identifier => {
-  return `${identifier.value[0].value}`;
-}
+const processIdentifier = identifier => (`${identifier.value[0].value}`);
+
+export default processIdentifier;
