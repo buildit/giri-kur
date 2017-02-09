@@ -25,9 +25,9 @@ if (options.help || !options.src) {
 
   const globals = [];
   const rules = {
-    elements: [],
-    classes: [],
-    ids: [],
+    elements: {},
+    classes: {},
+    ids: {},
   };
 
   $().children(n => n.node.type !== 'space').nodes.forEach(n => {
@@ -37,16 +37,16 @@ if (options.help || !options.src) {
     } else {
       const { selector, declarations, type } = processed;
       if (type === 'identifier') {
-        rules.elements.push({ selector, declarations });
+        rules.elements[selector] = Object.assign({}, rules.elements[selector], ...declarations);
       }
       if (type === 'class') {
-        rules.classes.push({ selector, declarations });
+        rules.classes[selector] = Object.assign({}, rules.classes[selector], ...declarations);
       }
       if (type === 'id') {
-        rules.ids.push({ selector, declarations });
+        rules.ids[selector] = Object.assign({}, rules.ids[selector], ...declarations);
       }
     }
   });
 
-  output(JSON.stringify({ globals, rules }), options);
+  output({ globals, rules }, options);
 }
