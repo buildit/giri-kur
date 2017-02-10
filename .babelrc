@@ -6,8 +6,7 @@
       "alias": {
         "lib": "./lib",
         "processors": "./processors",
-        "test": "./test",
-        "underscore": "lodash"
+        "settings": "./settings"
       }
     }]
   ]

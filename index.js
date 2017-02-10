@@ -1,11 +1,12 @@
 import { parse } from 'scss-parser';
 import createQueryWrapper from 'query-ast';
 
-import help from './lib/help';
-import readin from './lib/readin';
-import output from './lib/output';
-import * as display from './lib/display';
-import process from './processors';
+import help from 'lib/help';
+import readin from 'lib/readin';
+import output from 'lib/output';
+import * as display from 'lib/display';
+import * as settings from 'settings';
+import process from 'processors';
 
 const commandLineArgs = require('command-line-args');
 
@@ -15,6 +16,8 @@ const optionDefinitions = [
   { name: 'verbose', alias: 'v', type: Boolean },
   { name: 'src', alias: 's', type: String, multiple: true, defaultOption: true },
   { name: 'dest', alias: 'd', type: String },
+  { name: 'component-name', type: String },
+  { name: 'style-name', type: String },
 ];
 const options = commandLineArgs(optionDefinitions);
 
@@ -26,6 +29,12 @@ if (options.help || !options.src) {
   }
   if (options.verbose) {
     display.enableLog();
+  }
+  if (options['component-name']) {
+    settings.setComponentRepoName(options['component-name']);
+  }
+  if (options['style-name']) {
+    settings.setStyleRepoName(options['style-name']);
   }
 
   const content = readin(options.src);
