@@ -4,6 +4,7 @@ import createQueryWrapper from 'query-ast';
 import help from './lib/help';
 import readin from './lib/readin';
 import output from './lib/output';
+import * as display from './lib/display';
 import process from './processors';
 
 const commandLineArgs = require('command-line-args');
@@ -11,6 +12,7 @@ const commandLineArgs = require('command-line-args');
 const optionDefinitions = [
   { name: 'help', alias: 'h', type: Boolean },
   { name: 'console', alias: 'c', type: Boolean },
+  { name: 'verbose', alias: 'v', type: Boolean },
   { name: 'src', alias: 's', type: String, multiple: true, defaultOption: true },
   { name: 'dest', alias: 'd', type: String },
 ];
@@ -19,6 +21,13 @@ const options = commandLineArgs(optionDefinitions);
 if (options.help || !options.src) {
   help();
 } else {
+  if (options.console) {
+    display.enableDisplay();
+  }
+  if (options.verbose) {
+    display.enableLog();
+  }
+
   const content = readin(options.src);
   const ast = parse(content);
   const $ = createQueryWrapper(ast);
