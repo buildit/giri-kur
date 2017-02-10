@@ -1,4 +1,4 @@
-import help from '../../../lib/help';
+import help from 'lib/help';
 
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';

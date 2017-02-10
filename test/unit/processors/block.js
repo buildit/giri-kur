@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import process from '../../../processors';
-import processBlock from '../../../processors/block';
+import process from 'processors';
+import processBlock from 'processors/block';
 
 import { parse } from 'scss-parser';
 import createQueryWrapper from 'query-ast';
