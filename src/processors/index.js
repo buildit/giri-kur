@@ -1,3 +1,4 @@
+/** @module processors */
 import processClass from './class';
 import processRule from './rule';
 import processBlock from './block';
@@ -9,6 +10,7 @@ import processValue from './value';
 import processColorHex from './color_hex';
 import processComment from './comment';
 import processVariable from './variable';
+import processPseudoClass from './pseudoclass';
 import * as tokenTypes from './types';
 
 export const types = tokenTypes;
@@ -26,8 +28,14 @@ const processors = {
   comment_multiline: processComment,
   comment_singleline: processComment,
   variable: processVariable,
+  pseudo_class: processPseudoClass,
 };
 
+/**
+ * Takes a node from the scss-parser library and returns something usable as part of
+ * a style key inside a design token.
+ * @param {Object} node - A node in the scss-parser format
+ */
 const process = node => {
   const n = node.node ? node.node : node; // Seriously?  This is a thing we have to do?
   let returnValue;

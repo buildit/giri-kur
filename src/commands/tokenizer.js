@@ -1,9 +1,9 @@
 import { parse } from 'scss-parser';
 import createQueryWrapper from 'query-ast';
 
-import help from 'lib/help';
+import { tokenizerHelp } from 'lib/help';
 import readin from 'lib/readin';
-import output from 'lib/output';
+import { outputTokens } from 'lib/output';
 import * as display from 'lib/display';
 import * as settings from 'settings';
 import process from 'processors';
@@ -21,26 +21,33 @@ const optionDefinitions = [
 ];
 const options = commandLineArgs(optionDefinitions);
 
-if (options.help || !options.src) {
-  help();
-} else {
-  if (options.console) {
+const processOptions = cliOptions => {
+  if (cliOptions.console) {
     display.enableDisplay();
   }
-  if (options.verbose) {
+  if (cliOptions.verbose) {
     display.enableLog();
   }
-  if (options['component-name']) {
-    settings.setComponentRepoName(options['component-name']);
+  if (cliOptions['component-name']) {
+    settings.setComponentRepoName(cliOptions['component-name']);
   }
-  if (options['style-name']) {
-    settings.setStyleRepoName(options['style-name']);
+  if (cliOptions['style-name']) {
+    settings.setStyleRepoName(cliOptions['style-name']);
   }
+};
 
-  const content = readin(options.src);
+const addDefaults = src => (src);
+/* There's some funkiness that's coming from including this stuff.  Fix later.
+   (['node_modules/kiur/src/components', ...src]);
+ */
+
+const readAndParseSource = src => {
+  const content = readin(addDefaults(src)).join('');
   const ast = parse(content);
-  const $ = createQueryWrapper(ast);
+  return createQueryWrapper(ast);
+};
 
+const processTreeToData = $ => {
   const globals = [];
   const rules = {
     elements: {},
@@ -66,5 +73,16 @@ if (options.help || !options.src) {
     }
   });
 
-  output({ globals, rules }, options);
+  return { globals, rules };
+};
+
+
+if (options.help || !options.src) {
+  tokenizerHelp();
+} else {
+  processOptions(options);
+  const $ = readAndParseSource(options.src);
+  const processed = processTreeToData($);
+
+  outputTokens(processed, options);
 }

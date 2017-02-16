@@ -5,3 +5,4 @@ raw
 .nyc_output
 coverage
 dest
+doc

@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test nyc mocha --recursive --compilers js:babel-core/register --require babel-polyfill test/unit",
-    "lint": "./node_modules/.bin/eslint bin/ lib/ processors/ index.js"
+    "lint": "./node_modules/.bin/eslint src/ test/",
+    "doc": "npm run doc:build && open doc/index.html",
+    "doc:build": "./node_modules/.bin/jsdoc src -r -c .jsdoc.json"
   },
   "bin": {
-    "design-token-ingest": "bin/design-token-ingest.js"
+    "create-design-tokens": "src/bin/create-design-tokens.js"
   },
   "author": "Peter Monks",
   "license": "MIT",
@@ -23,7 +25,10 @@
     "eslint": "^3.15.0",
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-import-resolver-babel-module": "^3.0.0",
+    "eslint-plugin-chai-friendly": "^0.2.0",
     "eslint-plugin-import": "^2.2.0",
+    "jsdoc": "^3.4.3",
+    "jsdoc-export-default-interop": "^0.3.1",
     "json-pretty": "^0.0.1",
     "kiur": "^1.0.0",
     "mocha": "^3.2.0",

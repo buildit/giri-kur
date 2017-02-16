@@ -1,14 +1,33 @@
 import { expect } from 'chai';
-import process from 'processors';
 import processBlock from 'processors/block';
 
-import { parse } from 'scss-parser';
-import createQueryWrapper from 'query-ast';
+const testBlock = {
+  type: 'block',
+  value: [
+    { type: 'space', value: '\n  ' },
+    { type: 'declaration',
+      value: [
+        { type: 'property', value: [{ type: 'identifier', value: 'font-size' }] },
+        { type: 'punctuation', value: ':' },
+        { type: 'value',
+          value: [
+            { type: 'space', value: ' ' },
+            { type: 'number', value: '1' },
+            { type: 'identifier', value: 'rem' },
+          ],
+        },
+        { type: 'punctuation', value: ';' },
+      ],
+    },
+    { type: 'space', value: '\n' },
+  ],
+};
+
+const correct = [{ 'font-size': '1rem' }];
 
 describe('Block processor', () => {
-  const content = '{ padding: 1rem; }';
-  const ast = parse(content);
-  const $ = createQueryWrapper(ast);
-  console.log(process($().children().nodes[0]));
-
+  it('processes properly', () => {
+    const output = processBlock(testBlock);
+    expect(output).to.deep.equal(correct);
+  });
 });

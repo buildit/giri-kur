@@ -4,6 +4,8 @@
     "arrow-parens": "off",
     "indent": ["error", 2],
     "no-class-assign": "warn",
+    "no-unused-expressions": 0,
+    "chai-friendly/no-unused-expressions": 2,
   },
   "globals": {
     "describe": false,
@@ -26,5 +28,8 @@
     "import/resolver": {
       "babel-module": {}
     }
-  }
+  },
+  "plugins": [
+    "chai-friendly",
+  ],
 }

@@ -11,4 +11,4 @@ args.shift();
 args.shift();
 const argstring = args.join(' ');
 
-shell.exec(`${babelCli} index.js ${argstring}`);
+shell.exec(`${babelCli} src/commands/scss-generator.js ${argstring}`);

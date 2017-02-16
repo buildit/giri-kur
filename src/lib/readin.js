@@ -1,17 +1,10 @@
+/** @module lib/readin */
 import fs from 'fs';
 import path from 'path';
 
 import { log } from 'lib/display';
 
 import recursiveRead from 'recursive-readdir-sync';
-
-const addDefaults = src => (src);
-/**
- * There's some funkiness that's coming from including this stuff.
- * Need to revisit and fix later.
- (['node_modules/kiur/src/components', ...src]);
- */
-
 
 const generateListOfFiles = inputFiles => {
   const raw = [];
@@ -33,13 +26,17 @@ const generateListOfFiles = inputFiles => {
 
 const readAllFiles = filesList => (filesList.map(file => (fs.readFileSync(file, 'utf8'))));
 
+/**
+ * Reads in every file given and returns their contents
+ * @param {string[]} src - Array of filenames and/or directories to input
+ * @return {string[]} Array where each element is an individual file's contents
+ */
 const readin = (src = []) => {
-  const inputFiles = addDefaults(typeof src === 'string' ? [src] : src);
-
+  const inputFiles = typeof src === 'string' ? [src] : src;
   const fullFileList = generateListOfFiles(inputFiles);
 
   log(`Reading in ${fullFileList.length} file${fullFileList.length === 1 ? '' : 's'}`);
-  return readAllFiles(fullFileList).join('');
+  return readAllFiles(fullFileList);
 };
 
 export default readin;
