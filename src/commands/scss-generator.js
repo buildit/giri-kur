@@ -1,4 +1,4 @@
-import help from 'lib/help';
+import { scssGeneratorHelp } from 'lib/help';
 import readin from 'lib/readin';
 import * as display from 'lib/display';
 import { outputStyles } from 'lib/output';
@@ -25,7 +25,7 @@ const readAndParseSource = src => (
 );
 
 if (options.help || !options.src) {
-  help();
+  scssGeneratorHelp();
 } else {
   processOptions(options);
 
