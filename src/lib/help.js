@@ -106,12 +106,8 @@ const scssGeneratorSections = [
     header: 'Examples',
     content: [
       {
-        desc: '1. Ingest a single file and output it to the console.',
-        example: '$ create-design-token foo.scss',
-      },
-      {
-        desc: '2. Read in a directory and output it.',
-        example: '$ create-design-token --src ./orig --dest ./dest',
+        desc: '1. Read in a directory and output it.',
+        example: '$ ccreate-scss-from-tokens --src ./dest/tokens --dest ./dest',
       },
     ],
   },
