@@ -1,25 +1,32 @@
 import { expect } from 'chai';
 import processSelector from 'processors/selector';
 
-const testSelector = { type: 'selector',
+const testSelector = {
+  type: 'selector',
   value: [
-    { type: 'identifier',
-      value: 'h1',
-      start: { cursor: 898, line: 30, column: 0 },
-      next: { cursor: 900, line: 30, column: 2 } },
-    { type: 'space',
-      value: ' ',
-      start: { cursor: 900, line: 30, column: 2 },
-      next: { cursor: 901, line: 30, column: 3 } },
+    { type: 'identifier', value: 'h1' },
+    { type: 'space', value: ' ' },
   ],
-  start: { cursor: 898, line: 30, column: 0 },
-  next: { cursor: 901, line: 30, column: 3 } };
+};
+const testSelectorPseudo = {
+  type: 'selector',
+  value: [
+    { type: 'identifier', value: 'h1' },
+    { type: 'space', value: ' ' },
+    { type: 'pseudo_class', value: [{ type: 'identifier', value: 'hover' }] },
+  ],
+};
 
-const correct = { token: 'h1', type: 'identifier' };
+const correct = { token: ['h1'], type: 'identifier' };
+const correctPseudo = { token: ['h1', ':hover'], type: 'identifier' };
 
 describe('Selector Processor', () => {
   it('processes properly', () => {
     const output = processSelector(testSelector);
     expect(output).to.deep.equal(correct);
+  });
+  it('processes a pseudoclass properly', () => {
+    const output = processSelector(testSelectorPseudo);
+    expect(output).to.deep.equal(correctPseudo);
   });
 });

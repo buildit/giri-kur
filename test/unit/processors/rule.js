@@ -34,7 +34,7 @@ const testRule = { type: 'rule',
 };
 
 const correct = {
-  selector: 'h1',
+  selector: ['h1'],
   declarations: [
     { type: 'space', value: '\n  ' },
     { type: 'declaration',

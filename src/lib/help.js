@@ -121,4 +121,4 @@ export const tokenizerHelp = () => {
 };
 export const scssGeneratorHelp = () => {
   console.log(getUsage(scssGeneratorSections)); // eslint-disable-line no-console
-}
+};

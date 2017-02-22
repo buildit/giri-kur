@@ -1,5 +1,6 @@
 /** @module lib/generate/scss */
 import path from 'path';
+import { pd } from 'pretty-data';
 
 import { log } from 'lib/display';
 
@@ -32,12 +33,23 @@ const resolveAtomicDirectory = (outputDirectory, level) => {
 };
 
 
-const stylesToString = styles => (
-  Object.keys(styles).map(style => `${style}: ${styles[style]};`).join('\n')
-);
+const stringWithSelector = (selector, rulesAsString, parentSelector) => {
+  let finalSelector = selector;
+  if (selector === '*') {
+    return rulesAsString;
+  }
+  if (parentSelector) {
+    finalSelector = `&${finalSelector}`;
+  }
+  return `${finalSelector} {\n ${rulesAsString}\n}`;
+};
+const stylesToString = (selector, styles, parentSelector) => {
+  const formattedStyles = Object.keys(styles).map(style => `${style}: ${styles[style]};`).join('\n');
+  return stringWithSelector(selector, formattedStyles, parentSelector);
+};
 const rulesToFileContents = (name, rules) => {
-  const rulesAsString = stylesToString(rules);
-  return `${name} {\n ${rulesAsString}\n}`;
+  const rulesAsString = Object.keys(rules).map(r => stylesToString(r, rules[r], name)).join('\n');
+  return pd.css(`${name} {\n ${rulesAsString}\n}`);
 };
 
 const writeTokenScss = (location, name, styles, atomicLevel = defaultAtomicLevel) => {

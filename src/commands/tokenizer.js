@@ -47,6 +47,20 @@ const readAndParseSource = src => {
   return createQueryWrapper(ast);
 };
 
+const updateRules = (currentRules, newData) => {
+  const updatedRules = Object.assign({}, currentRules);
+  const selector = newData.selector[0];
+  if (!selector) {
+    return updatedRules;
+  }
+  const pseudoselector = newData.selector[1] || '*';
+  const selectorRules = currentRules[selector] || {};
+  const pseudoRules = Object.assign(selectorRules[pseudoselector] || {}, ...newData.declarations);
+  selectorRules[pseudoselector] = pseudoRules;
+  updatedRules[selector] = selectorRules;
+  return updatedRules;
+};
+
 const processTreeToData = $ => {
   const globals = [];
   const rules = {
@@ -60,9 +74,11 @@ const processTreeToData = $ => {
     if (processed.type === 'VARIABLE') {
       globals.push(processed.token);
     } else {
+      // console.log(processed);
       const { selector, declarations, type } = processed;
       if (type === 'identifier') {
-        rules.elements[selector] = Object.assign({}, rules.elements[selector], ...declarations);
+        rules.elements = updateRules(rules.elements, processed);
+        // rules.elements[selector] = Object.assign({}, rules.elements[selector], ...declarations);
       }
       if (type === 'class') {
         rules.classes[selector] = Object.assign({}, rules.classes[selector], ...declarations);
@@ -72,7 +88,6 @@ const processTreeToData = $ => {
       }
     }
   });
-
   return { globals, rules };
 };
 
