@@ -107,7 +107,7 @@ const scssGeneratorSections = [
     content: [
       {
         desc: '1. Read in a directory and output it.',
-        example: '$ ccreate-scss-from-tokens --src ./dest/tokens --dest ./dest',
+        example: '$ create-scss-from-tokens --src ./dest/tokens --dest ./dest',
       },
     ],
   },
