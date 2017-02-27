@@ -1,4 +1,5 @@
 import process from './index';
+import { addElement } from 'lib/tokenize/tokens';
 
 const processRule = rule => {
   const values = rule.value;
@@ -14,11 +15,13 @@ const processRule = rule => {
     }
   });
 
-  return {
+  const final = {
     selector,
     declarations,
     type,
   };
+  addElement(final);
+  return final;
 };
 
 export default processRule;

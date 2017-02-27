@@ -7,6 +7,7 @@ import { outputTokens } from 'lib/output';
 import * as display from 'lib/display';
 import * as settings from 'settings';
 import process from 'processors';
+import { allGlobals, allRules } from 'lib/tokenize/tokens';
 
 const commandLineArgs = require('command-line-args');
 
@@ -62,33 +63,12 @@ const updateRules = (currentRules, newData) => {
 };
 
 const processTreeToData = $ => {
-  const globals = [];
-  const rules = {
-    elements: {},
-    classes: {},
-    ids: {},
-  };
-
   $().children(n => n.node.type !== 'space').nodes.forEach(n => {
     const processed = process(n);
     if (processed.type === 'VARIABLE') {
       globals.push(processed.token);
-    } else {
-      // console.log(processed);
-      const { selector, declarations, type } = processed;
-      if (type === 'identifier') {
-        rules.elements = updateRules(rules.elements, processed);
-        // rules.elements[selector] = Object.assign({}, rules.elements[selector], ...declarations);
-      }
-      if (type === 'class') {
-        rules.classes[selector] = Object.assign({}, rules.classes[selector], ...declarations);
-      }
-      if (type === 'id') {
-        rules.ids[selector] = Object.assign({}, rules.ids[selector], ...declarations);
-      }
     }
   });
-  return { globals, rules };
 };
 
 
@@ -97,7 +77,7 @@ if (options.help || !options.src) {
 } else {
   processOptions(options);
   const $ = readAndParseSource(options.src);
-  const processed = processTreeToData($);
+  processTreeToData($);
 
-  outputTokens(processed, options);
+  outputTokens({ globals: allGlobals(), rules: allRules() }, options);
 }
