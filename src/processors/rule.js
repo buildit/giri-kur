@@ -8,7 +8,7 @@ const processRule = rule => {
 
   values.forEach(v => {
     if (v.type === 'selector') {
-      ({ token: selector, type } = process(v));
+      selector = process(v);
     } else if (v.type === 'block') {
       declarations = process(v);
     }
@@ -17,7 +17,6 @@ const processRule = rule => {
   return {
     selector,
     declarations,
-    type,
   };
 };
 
