@@ -42,7 +42,6 @@ const correct = {
 describe('Rule Processor', () => {
   it('processes properly', () => {
     const output = processRule(testRule);
-    console.log(output);
     expect(output).to.deep.equal(correct);
   });
 });
