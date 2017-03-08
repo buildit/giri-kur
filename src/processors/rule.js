@@ -4,7 +4,6 @@ const processRule = rule => {
   const values = rule.value;
   let selector;
   let declarations = [];
-  let type;
 
   values.forEach(v => {
     if (v.type === 'selector') {

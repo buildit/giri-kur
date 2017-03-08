@@ -17,8 +17,7 @@ const processSelector = selector => {
       }
       type = v.type;
       currentSelector = [process(v)];
-    }
-    else if (v.type !== 'punctuation') {
+    } else if (v.type !== 'punctuation') {
       currentSelector.push(process(v));
     }
   });

@@ -3,6 +3,7 @@ import processClass from './class';
 import processRule from './rule';
 import processBlock from './block';
 import processDeclaration from './declaration';
+import processFunction from './function';
 import processSelector from './selector';
 import processOperator from './operator';
 import processId from './id';
@@ -11,15 +12,20 @@ import processColorHex from './color_hex';
 import processComment from './comment';
 import processVariable from './variable';
 import processPseudoClass from './pseudoclass';
+import processArguments from './arguments';
 import * as tokenTypes from './types';
 
 export const types = tokenTypes;
 
+console.log('****');
+console.log(processArguments);
+console.log('****');
 const processors = {
   class: processClass,
   rule: processRule,
   block: processBlock,
   declaration: processDeclaration,
+  function: processFunction,
   selector: processSelector,
   operator: processOperator,
   id: processId,
@@ -29,8 +35,8 @@ const processors = {
   comment_singleline: processComment,
   variable: processVariable,
   pseudo_class: processPseudoClass,
+  arguments: processArguments,
 };
-
 /**
  * Takes a node from the scss-parser library and returns something usable as part of
  * a style key inside a design token.
@@ -42,8 +48,10 @@ const process = node => {
   if (processors[n.type]) {
     returnValue = processors[n.type](n);
   } else if (n.value) {
+    console.log(`type ${n.type} doesn't have a processor, using value`);
     returnValue = n.value;
   } else {
+    console.log(`type ${n.type} doesn't have a processor, just returning`);
     returnValue = n;
   }
   return returnValue;

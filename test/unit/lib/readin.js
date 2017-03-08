@@ -5,7 +5,6 @@ import readin from 'lib/readin';
 import * as display from 'lib/display';
 
 describe('readin lib', () => {
-
   const fooContents = '.foo { color: white; }';
   const barContents = '.bar { color: black; }';
   beforeEach(() => {
@@ -13,7 +12,7 @@ describe('readin lib', () => {
     mock({
       'foo.scss': fooContents,
       '.foo': fooContents,
-      'files': {
+      files: {
         'foo.scss': fooContents,
         'bar.scss': barContents,
       },

@@ -1,7 +1,8 @@
 import { expect } from 'chai';
 import processRule from 'processors/rule';
 
-const testRule = { type: 'rule',
+const testRule = {
+  type: 'rule',
   value: [
     { type: 'nonsense', value: 'foo' },
     { type: 'selector',
@@ -34,31 +35,14 @@ const testRule = { type: 'rule',
 };
 
 const correct = {
-  selector: ['h1'],
-  declarations: [
-    { type: 'space', value: '\n  ' },
-    { type: 'declaration',
-      value: [
-        { type: 'property', value: [{ type: 'identifier', value: 'font-size' }] },
-        { type: 'punctuation', value: ':' },
-        { type: 'value',
-          value: [
-            { type: 'space', value: ' ' },
-            { type: 'number', value: '1' },
-            { type: 'identifier', value: 'rem' },
-          ],
-        },
-        { type: 'punctuation', value: ';' },
-      ],
-    },
-    { type: 'space', value: '\n' },
-  ],
-  type: 'identifier',
+  selector: [{ token: ['h1'], type: 'identifier' }],
+  declarations: [ { 'font-size': '1rem' } ],
 };
 
 describe('Rule Processor', () => {
   it('processes properly', () => {
     const output = processRule(testRule);
+    console.log(output);
     expect(output).to.deep.equal(correct);
   });
 });

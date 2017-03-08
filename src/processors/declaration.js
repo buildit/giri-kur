@@ -7,7 +7,7 @@ const processDeclaration = declaration => {
   let type = 'DECLARATION';
   value.forEach(v => {
     if (v.type === 'property') {
-      propName = v.value[0].value;
+      propName = v.value.reduce((acc, val) => `${acc}${val.value}`, '');
       if (v.value[0].type === 'variable') {
         propName = `$${propName}`;
         type = 'VARIABLE';

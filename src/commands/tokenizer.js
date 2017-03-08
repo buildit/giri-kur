@@ -36,11 +36,9 @@ const processOptions = cliOptions => {
   }
 };
 
-// const addDefaults = src => (src);
-/* There's some funkiness that's coming from including this stuff.  Fix later.
-   (['node_modules/kiur/src/components', ...src]);
- */
-const addDefaults = src => (['node_modules/kiur/src/components', ...src]);
+const addDefaults = src => (src);
+// There's some funkiness that's coming from including this stuff.  Fix later.
+// const addDefaults = src => (['node_modules/kiur/src/components', ...src]);
 
 const readAndParseSource = src => {
   const content = readin(addDefaults(src)).join('');
@@ -79,7 +77,7 @@ const processTreeToData = $ => {
       selector.forEach(s => {
         const type = s.type;
         if (type === 'identifier') {
-          rules.elements = updateRules(rules.elements, {selector: s.token, declarations});
+          rules.elements = updateRules(rules.elements, { selector: s.token, declarations });
         }
         if (type === 'class') {
           rules.classes = updateRules(rules.classes, { selector: s.token, declarations });
