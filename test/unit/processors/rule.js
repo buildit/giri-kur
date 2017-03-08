@@ -36,7 +36,7 @@ const testRule = {
 
 const correct = {
   selector: [{ token: ['h1'], type: 'identifier' }],
-  declarations: [ { 'font-size': '1rem' } ],
+  declarations: [{ 'font-size': '1rem' }],
 };
 
 describe('Rule Processor', () => {

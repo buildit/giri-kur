@@ -17,9 +17,6 @@ import * as tokenTypes from './types';
 
 export const types = tokenTypes;
 
-console.log('****');
-console.log(processArguments);
-console.log('****');
 const processors = {
   class: processClass,
   rule: processRule,
@@ -48,10 +45,8 @@ const process = node => {
   if (processors[n.type]) {
     returnValue = processors[n.type](n);
   } else if (n.value) {
-    console.log(`type ${n.type} doesn't have a processor, using value`);
     returnValue = n.value;
   } else {
-    console.log(`type ${n.type} doesn't have a processor, just returning`);
     returnValue = n;
   }
   return returnValue;

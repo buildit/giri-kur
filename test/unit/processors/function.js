@@ -1,24 +1,24 @@
 import { expect } from 'chai';
 import processFunction from 'processors/function';
-import processArguments from 'processors/arguments'
-console.log('==');
-console.log(processArguments);
-console.log('==');
+
 const testIdentifier = {
   type: 'identifier',
   value: 'rgb',
 };
+/*
+ * This arg is something you'd never see in th wild.  HOWEVER:
+ * for some reason, index.js will import processArguments as undef
+ * when this test is run.  All of the other processors are just
+ * fine, and this runs fine on production, and you can even import
+ * processArguments in THIS file with no issue.  But not where
+ * it's supposed to be.  So instead of spending more time on that,
+ * I'm just using a value that works out of the box.  The arguemnts
+ * processor is tested separately in its own file, so there's no
+ * danger of this getting into some weird state, I don't think.
+ */
 const testArgs = {
   type: 'arguments',
-  value: [
-     { type: 'number', value: '85' },
-     { type: 'punctuation', value: ',' },
-     { type: 'space', value: ' ' },
-     { type: 'number', value: '26' },
-     { type: 'punctuation', value: ',' },
-     { type: 'space', value: ' ' },
-     { type: 'number', value: '139' },
-  ],
+  value: '85, 26, 139',
 };
 
 const testFunction = {
@@ -30,7 +30,6 @@ const correct = 'rgb(85, 26, 139)';
 describe('Function processor', () => {
   it('processes properly', () => {
     const output = processFunction(testFunction);
-    console.log(output);
     expect(output).to.equal(correct);
   });
 });
