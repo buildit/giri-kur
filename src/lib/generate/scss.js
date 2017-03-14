@@ -28,7 +28,7 @@ const componentFileContents = (selector, rules) => ({
   rule: formatRule(selector, rules),
 });
 
-const globalsFileContents = (globals = []) => globals.join('\n');
+const globalsFileContents = globals => globals.join('\n');
 
 const mainFileContents = fileNames => (fileNames.map(f => `@include "${f}";`).join('\n'));
 
