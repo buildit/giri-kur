@@ -31,7 +31,7 @@ const testSelectorWebkit = {
     { type: 'operator', value: '-' },
     { type: 'identifier', value: 'webkit-inner-spin-button' },
   ],
-}
+};
 const testSelectorMultiple = {
   type: 'selector',
   value: [
@@ -70,7 +70,7 @@ describe('Selector Processor', () => {
   it('processes a webkit rule properly', () => {
     const output = processSelector(testSelectorWebkit);
     expect(output).to.deep.equal(correctWebkit);
-  })
+  });
   it('processes multiple selectors properly', () => {
     const output = processSelector(testSelectorMultiple);
     expect(output).to.deep.equal(correctMultiple);

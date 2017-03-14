@@ -15,11 +15,12 @@ const buildDirectoryLocation = filePath => {
   return filePath;
 };
 
-export const writeFiles = (filePackage, location) => {
+const writeFiles = (filePackage, location) => {
   Object.keys(filePackage).forEach(filename => {
     const fullFilePath = path.resolve(location, filename);
     log(`Writing ${filename}`);
     buildDirectoryLocation(path.dirname(fullFilePath));
     fs.writeFileSync(fullFilePath, filePackage[filename], 'utf8');
   });
-}
+};
+export default writeFiles;

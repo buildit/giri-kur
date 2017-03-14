@@ -1,6 +1,5 @@
 /* eslint no-console: 0 */
 import * as display from 'lib/display';
-import util from 'util';
 
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';

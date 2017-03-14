@@ -53,7 +53,7 @@ const processorSections = [
       {
         desc: '2. Single file.',
         example: '$ create-scss-from-raw --src ./orig/file.scss --dest ./dest',
-      }
+      },
     ],
   },
   {
@@ -62,6 +62,7 @@ const processorSections = [
 ];
 
 
-export const processorHelp = () => {
+const processorHelp = () => {
   console.log(getUsage(processorSections)); // eslint-disable-line no-console
-}
+};
+export default processorHelp;

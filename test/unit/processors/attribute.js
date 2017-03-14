@@ -6,7 +6,7 @@ const testAttribute = {
   value: [
     { type: 'identifier', value: 'type' },
     { type: 'operator', value: '=' },
-    { type: 'string_double', value: 'number' }
+    { type: 'string_double', value: 'number' },
   ],
 };
 

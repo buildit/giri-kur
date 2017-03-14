@@ -6,4 +6,5 @@ import generateScss from './generate/scss';
  * @param {Object[]} globals - Variables
  * @param {Object[]} rules - Any element rules
  */
-export const outputStyles = (globals, rules) => (generateScss(globals, rules));
+const outputStyles = (globals, rules) => (generateScss(globals, rules));
+export default outputStyles;

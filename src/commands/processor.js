@@ -1,14 +1,14 @@
 import { parse } from 'scss-parser';
 import createQueryWrapper from 'query-ast';
 
-import { processorHelp } from 'lib/help';
+import processorHelp from 'lib/help';
 import readin from 'lib/readin';
 import generateRulePackages from 'lib/generate/rulePackages';
-import { outputStyles } from 'lib/output';
+import outputStyles from 'lib/output';
 import * as display from 'lib/display';
 import process from 'processors';
 import * as types from 'processors/types';
-import * as fs from 'lib/generate/fs';
+import writeFiles from 'lib/generate/fs';
 import path from 'path';
 
 const commandLineArgs = require('command-line-args');
@@ -76,5 +76,5 @@ if (options.help || !options.src || !options.dest) {
 
   const styleFiles = outputStyles(globals, rules);
 
-  fs.writeFiles(styleFiles, path.join(options.dest, 'scss'));
+  writeFiles(styleFiles, path.join(options.dest, 'scss'));
 }

@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { disableLog } from 'lib/display';
-import { writeFiles } from 'lib/generate/fs';
+import writeFiles from 'lib/generate/fs';
 
 describe('local fs functions', () => {
   beforeEach(() => {
