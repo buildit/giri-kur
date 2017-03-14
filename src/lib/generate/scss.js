@@ -1,16 +1,12 @@
 /** @module lib/generate/scss */
 import path from 'path';
-import { pd } from 'pretty-data';
 
-import { log } from 'lib/display';
+import formatGlobal from 'formatters/global';
+import formatRule from 'formatters/rule';
 
-import * as fs from './fs';
-
-const styleDirectoryName = 'scss';
 const tokenDirectoryName = 'components';
 const mainFile = 'main.scss';
-const variableFileName = 'variables';
-const variableFile = `_${variableFileName}.scss`;
+const variableFile = '_variables.scss';
 
 const atomicStructure = {
   atom: '1-Atoms',
@@ -23,81 +19,40 @@ const defaultAtomicLevel = 'atom';
 
 
 const resolveAtomicDirectoryName = level => (atomicStructure[level]);
-const resolveStyleDirectory = outputDirectory => (
-  path.resolve(outputDirectory, styleDirectoryName)
-);
-const resolveAtomicDirectory = (outputDirectory, level) => {
-  const relative = path.join(tokenDirectoryName, resolveAtomicDirectoryName(level));
-  const absolute = path.resolve(outputDirectory, styleDirectoryName, relative);
-  return { relative, absolute };
-};
-
-
-const stringWithSelector = (selector, rulesAsString, parentSelector) => {
-  let finalSelector = selector;
-  if (selector === '*') {
-    return rulesAsString;
-  }
-  if (parentSelector) {
-    finalSelector = `&${finalSelector}`;
-  }
-  return `${finalSelector} {\n ${rulesAsString}\n}`;
-};
-const stylesToString = (selector, styles, parentSelector) => {
-  const formattedStyles = Object.keys(styles).map(style => `${style}: ${styles[style]};`).join('\n');
-  return stringWithSelector(selector, formattedStyles, parentSelector);
-};
-const rulesToFileContents = (name, rules) => {
-  const rulesAsString = Object.keys(rules).map(r => stylesToString(r, rules[r], name)).join('\n');
-  return pd.css(`${name} {\n ${rulesAsString}\n}`);
-};
-
-const writeTokenScss = (location, name, styles, atomicLevel = defaultAtomicLevel) => {
-  const filename = `_${name}.scss`;
-  const contents = rulesToFileContents(name, styles);
-  const {
-    relative: includeDirectory,
-    absolute: outputDirectory,
-  } = resolveAtomicDirectory(location, atomicLevel);
-
-  fs.writeComponentFile(outputDirectory, filename, contents);
-
-  const includeFilename = path.join(includeDirectory, filename);
-  log(`Creating file ${includeFilename}`);
-  return includeFilename;
-};
-
-const writeTokens = (tokens, location) => (
-  tokens.map(token => writeTokenScss(location, token.name, token.styles, token.atomicLevel))
+const resolveAtomicDirectory = (level, filename) => (
+  path.join(tokenDirectoryName, resolveAtomicDirectoryName(level), filename)
 );
 
-const globalToString = global => (Object.keys(global).map(g => `${g}: ${global[g]};`)[0]);
-const globalsToString = globals => (globals.map(g => globalToString(g)).join('\n'));
-const writeGlobals = (globals, location) => {
-  const contents = globalsToString(globals);
-  log(`Writing global variables to file ${variableFile}`);
-  fs.writeComponentFile(resolveStyleDirectory(location), variableFile, contents);
-  return [variableFile];
-};
+const componentFileContents = (selector, rules) => ({
+  filename: resolveAtomicDirectory(defaultAtomicLevel, `_${selector}.scss`),
+  rule: formatRule(selector, rules),
+});
 
+const globalsFileContents = (globals = []) => globals.join('\n');
 
-const writeMain = (includeFiles, outputDirectory) => {
-  const styleDirectory = resolveStyleDirectory(outputDirectory);
-  const contents = includeFiles.map(f => `@import "./${f}";`).join('\n');
-  log(`Writing ${mainFile} file`);
-  fs.writeComponentFile(styleDirectory, mainFile, contents);
-};
+const mainFileContents = fileNames => (fileNames.map(f => `@include "${f}";`).join('\n'));
 
 /**
  * Outputs a collection of SCSS files
- * @param {Object} data - Global definitions and token file contents
- * @param {Object} data.tokens - Tokens
- * @param {Object} data.globals - Global definitions
- * @param {string} outputDirectory - The directory the scss folder should be created in
+ * @param {Object[]} rules - Rules
+ * @param {Object[]} globals - Global definitions
  */
-const generateScss = (data, outputDirectory) => {
-  const tokenFiles = writeTokens(data.tokens, outputDirectory);
-  const globalFiles = writeGlobals(data.globals, outputDirectory);
-  writeMain([...globalFiles, ...tokenFiles], outputDirectory);
+const generateScss = (globals, rules) => {
+  const outputFiles = {};
+
+  const globalsContents = globalsFileContents([].concat(...globals.map(g => formatGlobal(g))));
+  if (globalsContents.length) {
+    const globalFilename = path.join(variableFile);
+    outputFiles[globalFilename] = globalsContents;
+  }
+
+  Object.keys(rules).forEach(k => {
+    const { filename, rule } = componentFileContents(k, rules[k]);
+    outputFiles[filename] = rule;
+  });
+
+  outputFiles[mainFile] = mainFileContents(Object.keys(outputFiles));
+
+  return outputFiles;
 };
 export default generateScss;

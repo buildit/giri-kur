@@ -1,4 +1,5 @@
 /** @module processors */
+import processAttribute from './attribute';
 import processClass from './class';
 import processRule from './rule';
 import processBlock from './block';
@@ -18,6 +19,7 @@ import * as tokenTypes from './types';
 export const types = tokenTypes;
 
 const processors = {
+  attribute: processAttribute,
   class: processClass,
   rule: processRule,
   block: processBlock,

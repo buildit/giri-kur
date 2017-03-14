@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { pd } from 'pretty-data';
+
 import { log } from 'lib/display';
 
 export const buildDirectoryLocation = filePath => {

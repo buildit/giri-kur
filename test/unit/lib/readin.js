@@ -22,6 +22,11 @@ describe('readin lib', () => {
     mock.restore();
   });
 
+  it('reads in nothing', () => {
+    const results = readin();
+    expect(results).to.deep.equal([]);
+  });
+
   it('reads in a single file', () => {
     const results = readin('foo.scss');
     expect(results).to.deep.equal([fooContents]);

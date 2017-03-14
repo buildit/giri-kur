@@ -8,16 +8,11 @@ import generateScss from './generate/scss';
  * @param {Object} settings
  * @param {string} settings.dest - Where the token directory shoud be output
  */
-export const outputTokens = (data, settings = {}) => {
-  generateTokens(data, settings.dest);
-};
+export const outputTokens = (data, settings = {}) => (generateTokens(data, settings.dest));
 
 /**
  * Takes token data and outputs an SCSS directory
- * @param {Object} data - The data
- * @param {Object} settings
- * @param {string} settings.dest - Where the SCSS directory shoud be output
+ * @param {Object[]} globals - Variables
+ * @param {Object[]} rules - Any element rules
  */
-export const outputStyles = (data, settings = {}) => {
-  generateScss(data, settings.dest);
-};
+export const outputStyles = (globals, rules) => (generateScss(globals, rules));

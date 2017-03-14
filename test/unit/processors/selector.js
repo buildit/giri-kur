@@ -16,6 +16,22 @@ const testSelectorPseudo = {
     { type: 'pseudo_class', value: [{ type: 'identifier', value: 'hover' }] },
   ],
 };
+const testSelectorWebkit = {
+  type: 'selector',
+  value: [
+    { type: 'attribute',
+      value: [
+        { type: 'identifier', value: 'type' },
+        { type: 'operator', value: '=' },
+        { type: 'string_double', value: 'number' },
+      ],
+    },
+    { type: 'punctuation', value: ':' },
+    { type: 'punctuation', value: ':' },
+    { type: 'operator', value: '-' },
+    { type: 'identifier', value: 'webkit-inner-spin-button' },
+  ],
+}
 const testSelectorMultiple = {
   type: 'selector',
   value: [
@@ -26,13 +42,21 @@ const testSelectorMultiple = {
     { type: 'space', value: ' ' },
   ],
 };
+const testSelectorWeird = {
+  type: 'selector',
+  value: [
+    { type: 'punctuation', value: ',' },
+    { type: 'space', value: ' ' },
+    { type: 'identifier', value: 'h2' },
+    { type: 'space', value: ' ' },
+  ],
+};
 
-const correct = [{ token: ['h1'], type: 'identifier' }];
-const correctPseudo = [{ token: ['h1', ':hover'], type: 'identifier' }];
-const correctMultiple = [
-  { token: ['h1'], type: 'identifier' },
-  { token: ['h2'], type: 'identifier' },
-];
+const correct = [['h1']];
+const correctPseudo = [['h1', ':hover']];
+const correctWebkit = [['[type=number]', '::-webkit-inner-spin-button']];
+const correctMultiple = [['h1'], ['h2']];
+const correctWeird = [['h2']];
 
 describe('Selector Processor', () => {
   it('processes properly', () => {
@@ -43,8 +67,16 @@ describe('Selector Processor', () => {
     const output = processSelector(testSelectorPseudo);
     expect(output).to.deep.equal(correctPseudo);
   });
+  it('processes a webkit rule properly', () => {
+    const output = processSelector(testSelectorWebkit);
+    expect(output).to.deep.equal(correctWebkit);
+  })
   it('processes multiple selectors properly', () => {
     const output = processSelector(testSelectorMultiple);
     expect(output).to.deep.equal(correctMultiple);
+  });
+  it('processes something weird', () => {
+    const output = processSelector(testSelectorWeird);
+    expect(output).to.deep.equal(correctWeird);
   });
 });

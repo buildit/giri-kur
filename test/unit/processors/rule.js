@@ -35,7 +35,7 @@ const testRule = {
 };
 
 const correct = {
-  selector: [{ token: ['h1'], type: 'identifier' }],
+  selector: [['h1']],
   declarations: [{ 'font-size': '1rem' }],
 };
 

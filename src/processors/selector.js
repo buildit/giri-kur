@@ -1,33 +1,37 @@
 import process, { stripSpaces } from './index';
 
+const distillSelector = fullSelector => {
+  const finalSelector = [fullSelector.shift()];
+  const pseudo = fullSelector.join('');
+  if (pseudo.length) {
+    finalSelector.push(pseudo);
+  }
+  return finalSelector;
+};
+
 const processSelector = selector => {
   const value = stripSpaces(selector.value);
-  // Hot garbage ahead.  All this is to deal with compount
-  // selectors.  `a:hover, a:focus, #foo` kinds of things.
+
+  // Things this needs to cope with:
+  //   a
+  //   a:hover
+  //   a:hover, a:focus
+  //   a::-webkit-wtfery
   const allSelectors = [];
   let currentSelector = [];
-  let type;
   value.forEach(v => {
-    if (['identifier', 'id', 'class'].indexOf(v.type) >= 0) {
+    if (v.value === ',') {
       if (currentSelector.length > 0) {
-        allSelectors.push({
-          token: currentSelector,
-          type,
-        });
+        allSelectors.push(currentSelector);
       }
-      type = v.type;
-      currentSelector = [process(v)];
-    } else if (v.type !== 'punctuation') {
+      currentSelector = [];
+    } else {
       currentSelector.push(process(v));
     }
   });
-  allSelectors.push({
-    token: currentSelector,
-    type,
-  });
+  allSelectors.push(currentSelector);
 
-
-  return allSelectors;
+  return allSelectors.map(v => distillSelector(v));
 };
 
 export default processSelector;

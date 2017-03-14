@@ -84,7 +84,7 @@ const resolveTokenDirectory = outputDirectory => (path.resolve(outputDirectory, 
 /**
  * Outputs design tokens
  * @param {Object} data - All data to be output
- * @param {Object[]} data.rules - Token files
+ * @param {Object[]} data.rules - CSS rule sets
  * @param {Object[]} data.globals - Global variable definitions
  * @param {string} outputDirectory - Directory for files to be output to
  */
