@@ -1,3 +1,5 @@
+import { pd } from 'pretty-data';
+
 import formatDeclaration from './declaration';
 
 const formatSelector = (selector, pseudo = '') => {
@@ -18,6 +20,6 @@ const formatRule = (selector, declarations) => {
     return formatted;
   }));
 
-  return `${formatSelector(selector)} {\n ${formattedDeclarations.join('\n')} \n}`;
+  return pd.css(`${formatSelector(selector)} {\n ${formattedDeclarations.join('\n')} \n}`);
 };
 export default formatRule;

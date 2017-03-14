@@ -1,13 +1,15 @@
 import { parse } from 'scss-parser';
 import createQueryWrapper from 'query-ast';
 
-import { tokenizerHelp } from 'lib/help';
+import { processorHelp } from 'lib/help';
 import readin from 'lib/readin';
 import generateRulePackages from 'lib/generate/rulePackages';
 import { outputStyles } from 'lib/output';
 import * as display from 'lib/display';
 import process from 'processors';
 import * as types from 'processors/types';
+import * as fs from 'lib/generate/fs';
+import path from 'path';
 
 const commandLineArgs = require('command-line-args');
 
@@ -62,8 +64,8 @@ const processTreeToData = $ => {
 };
 
 
-if (options.help || !options.src) {
-  tokenizerHelp();
+if (options.help || !options.src || !options.dest) {
+  processorHelp();
 } else {
   processOptions(options);
   const $ = readAndParseSource(options.src);
@@ -71,7 +73,8 @@ if (options.help || !options.src) {
 
   const globals = processed.globals;
   const rules = generateRulePackages(processed.rules);
-  display.debug(rules);
 
   const styleFiles = outputStyles(globals, rules);
+
+  fs.writeFiles(styleFiles, path.join(options.dest, 'scss'));
 }

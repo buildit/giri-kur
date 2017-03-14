@@ -1,11 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-import { pd } from 'pretty-data';
-
 import { log } from 'lib/display';
 
-export const buildDirectoryLocation = filePath => {
+const buildDirectoryLocation = filePath => {
   if (fs.existsSync(filePath)) {
     return filePath;
   }
@@ -17,9 +15,11 @@ export const buildDirectoryLocation = filePath => {
   return filePath;
 };
 
-export const writeComponentFile = (filePath, filename, contents) => {
-  buildDirectoryLocation(filePath);
-
-  log(`Writing ${filePath}\\${filename}`);
-  fs.writeFileSync(path.resolve(filePath, filename), contents, 'utf8');
-};
+export const writeFiles = (filePackage, location) => {
+  Object.keys(filePackage).forEach(filename => {
+    const fullFilePath = path.resolve(location, filename);
+    log(`Writing ${filename}`);
+    buildDirectoryLocation(path.dirname(fullFilePath));
+    fs.writeFileSync(fullFilePath, filePackage[filename], 'utf8');
+  });
+}
