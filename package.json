@@ -10,7 +10,7 @@
     "doc:build": "./node_modules/.bin/jsdoc src -r -c .jsdoc.json"
   },
   "bin": {
-    "create-scss-from-raw": "src/bin/create-scss-from-raw.js",
+    "create-scss-from-raw": "src/bin/create-scss-from-raw.js"
   },
   "author": "Peter Monks",
   "license": "MIT",
