@@ -5,8 +5,8 @@ import formatGlobal from 'formatters/global';
 import formatRule from 'formatters/rule';
 
 const tokenDirectoryName = 'components';
-const mainFile = 'main.scss';
-const variableFile = '_variables.scss';
+export const mainFile = 'main.scss';
+export const variableFile = '_variables.scss';
 
 const atomicStructure = {
   atom: '1-Atoms',
@@ -30,7 +30,7 @@ const componentFileContents = (selector, rules) => ({
 
 const globalsFileContents = globals => globals.join('\n');
 
-const mainFileContents = fileNames => (fileNames.map(f => `@include "${f}";`).join('\n'));
+const mainFileContents = fileNames => (fileNames.map(f => `@import "${f}";`).join('\n'));
 
 /**
  * Outputs a collection of SCSS files

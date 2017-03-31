@@ -15,18 +15,22 @@
   "author": "Peter Monks",
   "license": "MIT",
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "babel-cli": "^6.22.2",
     "babel-plugin-module-resolver": "^2.5.0",
     "babel-preset-es2015": "^6.22.0",
     "camelcase": "^4.0.0",
     "chai": "^3.5.0",
+    "change-case": "^3.0.1",
     "command-line-args": "^4.0.1",
     "command-line-usage": "^4.0.0",
+    "download-file-sync": "^1.0.4",
     "eslint": "^3.15.0",
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-import-resolver-babel-module": "^3.0.0",
     "eslint-plugin-chai-friendly": "^0.2.0",
     "eslint-plugin-import": "^2.2.0",
+    "fingerprinting": "^1.0.1",
     "jsdoc": "^3.4.3",
     "jsdoc-export-default-interop": "^0.3.1",
     "json-pretty": "^0.0.1",
@@ -40,6 +44,7 @@
     "scss-parser": "^1.0.0",
     "shelljs": "^0.7.6",
     "sinon": "^1.17.7",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "tmp": "^0.0.31"
   }
 }

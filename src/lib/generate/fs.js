@@ -15,12 +15,23 @@ const buildDirectoryLocation = filePath => {
   return filePath;
 };
 
+export const fileEncodingType = filename => {
+  let encoding = 'utf8';
+  const extension = path.extname(filename);
+  if (['.jpg', 'jpeg', '.png', '.gif'].indexOf(extension) !== -1) {
+    encoding = 'binary';
+  }
+  return encoding;
+}
+
 const writeFiles = (filePackage, location) => {
   Object.keys(filePackage).forEach(filename => {
     const fullFilePath = path.resolve(location, filename);
     log(`Writing ${filename}`);
     buildDirectoryLocation(path.dirname(fullFilePath));
-    fs.writeFileSync(fullFilePath, filePackage[filename], 'utf8');
+
+    const encoding = fileEncodingType(filename);
+    fs.writeFileSync(fullFilePath, filePackage[filename], encoding);
   });
 };
 export default writeFiles;

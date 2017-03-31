@@ -14,6 +14,8 @@ import processComment from './comment';
 import processVariable from './variable';
 import processPseudoClass from './pseudoclass';
 import processArguments from './arguments';
+import processAtrule from './atrule';
+import processAtkeyword from './atkeyword';
 import * as tokenTypes from './types';
 
 export const types = tokenTypes;
@@ -35,6 +37,8 @@ const processors = {
   variable: processVariable,
   pseudo_class: processPseudoClass,
   arguments: processArguments,
+  atrule: processAtrule,
+  atkeyword: processAtkeyword,
 };
 /**
  * Takes a node from the scss-parser library and returns something usable as part of
