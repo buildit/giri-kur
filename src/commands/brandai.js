@@ -30,7 +30,6 @@ const optionDefinitions = [
   { name: 'console', alias: 'c', type: Boolean },
   { name: 'verbose', alias: 'v', type: Boolean },
   { name: 'src', alias: 's', type: String, defaultOption: true },
-  { name: 'dest', alias: 'd', type: String },
   { name: 'debugger', type: Boolean },
   { name: 'cdn', type: String },
   { name: 'account', type: String },
@@ -93,13 +92,13 @@ const addBrandAiToMain = main => {
 };
 
 const openMainScssFile = () => {
-  const contents = readin(`${options.dest}/${scssDirectory}/${mainFile}`);
+  const contents = readin(`${options.src}/${scssDirectory}/${mainFile}`);
   const { whatever: parsed } = processTreeToData(parseSource(contents[0]));
   return parsed;
 };
 
 const openGlobalScssFile = () => {
-  const contents = readin(`${options.dest}/${scssDirectory}/${variableFile}`);
+  const contents = readin(`${options.src}/${scssDirectory}/${variableFile}`);
   const { globals } = processTreeToData(parseSource(contents[0]));
   return globals;
 };
@@ -130,13 +129,16 @@ const processFiles = (files, type) => {
 const writeAssetFiles = (files, type) => {
   const assetsToWrite = {};
   const newGlobals = {};
+
+  const cdn = options.cdn ? options.cdn : '';
+
   files.forEach(file => {
     const assetPath = path.join(`/assets/${type}`, file.fingerprinted);
-    newGlobals[file.variable] = `"${assetPath}"`;
+    newGlobals[file.variable] = `url("${cdn}${assetPath}")`;
     assetsToWrite[file.fingerprinted] = file.content;
   });
 
-  writeFiles(assetsToWrite, path.join(`./dest/assets/${type}`));
+  writeFiles(assetsToWrite, path.join(`./${options.src}/assets/${type}`));
 
   return newGlobals;
 };
@@ -156,7 +158,8 @@ if (options.help || !options.src) {
   brandaiHelp();
 } else {
   processOptions(options);
-  const config = retrieveBrandAiConfig('monksp-buildit', 'primary-brand', 'Bko6hpr5g');
+
+  const config = retrieveBrandAiConfig(options.account, options.brand, options.key);
 
   const parsedMain = openMainScssFile();
   const updated = addBrandAiToMain(parsedMain);
@@ -172,6 +175,6 @@ if (options.help || !options.src) {
     'main.scss': updated.map(p => formatAtrule(p)).join('\n'),
     '_variables.scss': formatGlobal(globals).join('\n'),
     '_style-params.scss': config.variableData,
-  }, `./dest/${scssDirectory}`);
+  }, `./${options.src}/${scssDirectory}`);
   display.debug(formatGlobal(globals));
 }
