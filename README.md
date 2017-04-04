@@ -7,6 +7,7 @@ SCSS->Design Token processor
 # Things you can do
 * `npm run doc` Generates esdoc and opens your browser to look at it.
 * `bin/create-scss-from-raw --help` tells you how to use the thing
+  `bin/incorporate-brandai.js --help` tells you how to incorporate a brandai brand package
 
 # Installation
 This was built using yarn as package manager, but there should be no issue just using regular npm as well.
