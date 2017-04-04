@@ -25,7 +25,9 @@ const generateListOfFiles = inputFiles => {
   return raw.map(file => (path.resolve(file)));
 };
 
-const readAllFiles = filesList => (filesList.map(file => (fs.readFileSync(file, fileEncodingType(file)))));
+const readAllFiles = filesList => (
+  filesList.map(file => (fs.readFileSync(file, fileEncodingType(file))))
+);
 
 const readAllFilesAndMaintainNames = filesList => {
   const filesWithContents = {};
@@ -49,10 +51,11 @@ const readin = (src = [], maintainFilenames = false) => {
   const fullFileList = generateListOfFiles(inputFiles);
 
   log(`Reading in ${fullFileList.length} file${fullFileList.length === 1 ? '' : 's'}`);
-  return maintainFilenames ? readAllFilesAndMaintainNames(fullFileList) : readAllFiles(fullFileList);
+  return maintainFilenames
+    ? readAllFilesAndMaintainNames(fullFileList)
+    : readAllFiles(fullFileList);
 };
 
-export const readinWithFilenames = (src = []) => {
-  return readin(src, true);
-}
+export const readinWithFilenames = (src = []) => (readin(src, true));
+
 export default readin;

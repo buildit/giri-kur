@@ -1,7 +1,7 @@
 import { parse } from 'scss-parser';
 import createQueryWrapper from 'query-ast';
 
-import processorHelp from 'lib/help';
+import { processorHelp } from 'lib/help';
 import readin from 'lib/readin';
 import generateRulePackages from 'lib/generate/rulePackages';
 import outputStyles from 'lib/output';

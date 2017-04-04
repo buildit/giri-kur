@@ -1,16 +1,16 @@
-import admzip from 'adm-zip';
+import Admzip from 'adm-zip';
 import tmp from 'tmp';
+import childProcess from 'child_process';
 
 import writeFiles from 'lib/generate/fs';
 
-const download = url => {
-  return require('child_process')
-    .execFileSync('curl', ['--silent', '-L', url], {encoding: 'binary'});
-}
+const download = url => (
+  childProcess.execFileSync('curl', ['--silent', '-L', url], { encoding: 'binary' })
+);
 
 const unzipBuffer = buffer => {
-  const zip = new admzip(buffer);
-  const entries = zip.getEntries()
+  const zip = new Admzip(buffer);
+  const entries = zip.getEntries();
 
   const files = {};
   entries.forEach(entry => {
@@ -26,7 +26,7 @@ const unzipBuffer = buffer => {
 const downloadBrandAiFile = (account, brand, filename, key = null) => {
   const url = `https://assets.brand.ai/${account}/${brand}/${filename}?key=${key}`;
   return Buffer.from(download(url), 'binary');
-}
+};
 
 export const downloadBrandAiVariables = (account, brand, key) => (
   downloadBrandAiFile(account, brand, '_style-params.scss', key)

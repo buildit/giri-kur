@@ -22,7 +22,7 @@ export const fileEncodingType = filename => {
     encoding = 'binary';
   }
   return encoding;
-}
+};
 
 const writeFiles = (filePackage, location = '') => {
   Object.keys(filePackage).forEach(filename => {

@@ -61,8 +61,78 @@ const processorSections = [
   },
 ];
 
+const brandaiSections = [
+  {
+    header: 'incorporate-brandai',
+    content: 'Downloads Brand.ai assets and incorporates them into a generated scss package',
+  },
+  {
+    header: 'Synopsis',
+    content: [
+      '$ incorporate-brandai [bold]{--src} sourceDir... ',
+      '$ incorporate-brandai [bold]{--help}',
+    ],
+  },
+  {
+    header: 'Options',
+    optionList: [
+      {
+        name: 'src',
+        typeLabel: '[underline]{dir}, ...',
+        description: 'The input to process.',
+      },
+      {
+        name: 'console',
+        description: 'Outputs the generated token file to the console.',
+      },
+      {
+        name: 'verbose',
+        description: 'Enables console display of events as they happen.',
+      },
+      {
+        name: 'debugger',
+        description: 'Enables any current debug statments to output.',
+      },
+      {
+        name: 'cdn',
+        description: 'Adds a cdn prefix to asset file variables.',
+      },
+      {
+        name: 'account',
+        description: 'Required:  Specify the brandai account name to pull from.',
+      },
+      {
+        name: 'brand',
+        description: 'Required: Specify the brand inside an account to pull from.',
+      },
+      {
+        name: 'key',
+        description: 'Specify the api key for brandai (probably required, but they can be public).',
+      },
+      {
+        name: 'help',
+        description: 'Print this usage guide.',
+      },
+    ],
+  },
+  {
+    header: 'Examples',
+    content: [
+      {
+        desc: 'Incorporate https://brandai/monksp-buildit/primary',
+        example: '$ incorporate-brandai --src ./styles --account monksp-buildit --brand primary --key xyzzy',
+      },
+    ],
+  },
+  {
+    content: 'Project home: [underline]{https://github.com/buildit/giri-kur}',
+  },
+];
 
-const processorHelp = () => {
+export const processorHelp = () => {
   console.log(getUsage(processorSections)); // eslint-disable-line no-console
 };
-export default processorHelp;
+
+export const brandaiHelp = () => {
+  console.log(getUsage(brandaiSections)); // eslint-disable-line no-console
+};

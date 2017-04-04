@@ -1,18 +1,14 @@
 import { parse } from 'scss-parser';
 import createQueryWrapper from 'query-ast';
 
-import https from 'https';
-
 import {
   downloadBrandAiVariables,
   downloadBrandAiImages,
   downloadBrandAiIcons,
   downloadBrandAiLogos,
 } from 'lib/download';
-import processorHelp from 'lib/help';
-import generateRulePackages from 'lib/generate/rulePackages';
+import { brandaiHelp } from 'lib/help';
 import readin, { readinWithFilenames } from 'lib/readin';
-import outputStyles from 'lib/output';
 import * as display from 'lib/display';
 import process from 'processors';
 import * as types from 'processors/types';
@@ -33,7 +29,7 @@ const optionDefinitions = [
   { name: 'help', alias: 'h', type: Boolean },
   { name: 'console', alias: 'c', type: Boolean },
   { name: 'verbose', alias: 'v', type: Boolean },
-  { name: 'src', alias: 's', type: String, multiple: true, defaultOption: true },
+  { name: 'src', alias: 's', type: String, defaultOption: true },
   { name: 'dest', alias: 'd', type: String },
   { name: 'debugger', type: Boolean },
   { name: 'cdn', type: String },
@@ -55,8 +51,6 @@ const processOptions = cliOptions => {
   }
 };
 
-
-
 const processTreeToData = $ => {
   const globals = [];
   const whatever = [];
@@ -76,26 +70,19 @@ const processTreeToData = $ => {
 
 const parseSource = src => (createQueryWrapper(parse(src)));
 
-const incorporateBrandAiData = originalData => {
-  const parsed = parseSource(originalData);
-  const { globals, whatever } = processTreeToData(parsed);
-  display.debug(whatever);
-  console.log(globals);
-}
-
 const retrieveBrandAiConfig = (account, brand, key) => {
   const variableData = downloadBrandAiVariables(account, brand, key);
   const imagesDir = downloadBrandAiImages(account, brand, key);
   const logosDir = downloadBrandAiLogos(account, brand, key);
   const iconsDir = downloadBrandAiIcons(account, brand, key);
   return { variableData, imagesDir, logosDir, iconsDir };
-}
+};
 
 const addBrandAiToMain = main => {
   let alreadyIncluded = false;
   const finalizedMain = main;
   main.forEach(r => {
-    if (r.keyword && r.keyword == '@import' && r.arguments && r.arguments == '_style-params.scss') {
+    if (r.keyword && r.keyword === '@import' && r.arguments && r.arguments === '_style-params.scss') {
       alreadyIncluded = true;
     }
   });
@@ -115,7 +102,7 @@ const openGlobalScssFile = () => {
   const contents = readin(`${options.dest}/${scssDirectory}/${variableFile}`);
   const { globals } = processTreeToData(parseSource(contents[0]));
   return globals;
-}
+};
 
 const processFiles = (files, type) => {
   const BRANDAI_PREFIX = `brandai-${type}-`;
@@ -126,7 +113,7 @@ const processFiles = (files, type) => {
     const extension = path.extname(filename);
     const name = path.basename(filename, extension);
     const variable = processVariable({ value: `${BRANDAI_PREFIX}${changeCase.paramCase(name)}` });
-    const fingerprinted = fingerprint(basename, { content: files[filename] })
+    const fingerprinted = fingerprint(basename, { content: files[filename] });
 
     processedFiles.push({
       name,
@@ -138,7 +125,7 @@ const processFiles = (files, type) => {
   });
 
   return processedFiles;
-}
+};
 
 const writeAssetFiles = (files, type) => {
   const assetsToWrite = {};
@@ -154,7 +141,7 @@ const writeAssetFiles = (files, type) => {
   return newGlobals;
 };
 
-const openFilesDirectory = directory => (readinWithFilenames(directory))
+const openFilesDirectory = directory => (readinWithFilenames(directory));
 const incorporateFiles = (directory, type) => {
   const assets = openFilesDirectory(directory);
   const files = processFiles(assets, type);
@@ -165,9 +152,9 @@ const incorporateImages = (directory) => (incorporateFiles(directory, 'images'))
 const incorporateIcons = (directory) => (incorporateFiles(directory, 'icons'));
 const incorporateLogos = (directory) => (incorporateFiles(directory, 'logos'));
 
-// if (options.help || !options.src || !options.dest) {
-//   processorHelp();
-// } else {
+if (options.help || !options.src) {
+  brandaiHelp();
+} else {
   processOptions(options);
   const config = retrieveBrandAiConfig('monksp-buildit', 'primary-brand', 'Bko6hpr5g');
 
@@ -176,17 +163,15 @@ const incorporateLogos = (directory) => (incorporateFiles(directory, 'logos'));
 
   const globals = Object.assign(...openGlobalScssFile());
 
-  Object.assign(
-    globals,
-    incorporateImages(config.imagesDir),
-    incorporateIcons(config.iconsDir),
-    incorporateLogos(config.logosDir),
-  );
+  const images = incorporateImages(config.imagesDir);
+  const icons = incorporateIcons(config.iconsDir);
+  const logos = incorporateLogos(config.logosDir);
+  Object.assign(globals, images, icons, logos);
 
   writeFiles({
     'main.scss': updated.map(p => formatAtrule(p)).join('\n'),
     '_variables.scss': formatGlobal(globals).join('\n'),
     '_style-params.scss': config.variableData,
-  }, './dest/${scssDirectory}')
+  }, `./dest/${scssDirectory}`);
   display.debug(formatGlobal(globals));
-// }
+}

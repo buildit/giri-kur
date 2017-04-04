@@ -3,6 +3,7 @@ import processAtrule from 'processors/atrule';
 
 const testAttribute = {
   value: [
+    { type: 'foo', value: 'bar' },
     { type: 'atkeyword', value: 'import' },
     { type: 'identifier', value: 'media' },
     { type: 'arguments', value: ['foo'] },
@@ -24,14 +25,15 @@ const testAttribute = {
 
 const testAttribute2 = {
   value: [
-  { type: 'atkeyword', value: 'import' },
-  { type: 'string_double', value: 'foo.scss' },
-]};
+    { type: 'atkeyword', value: 'import' },
+    { type: 'string_double', value: 'foo.scss' },
+  ],
+};
 
 const correct = {
   keyword: '@import',
   identifier: 'media',
-  arguments: [ 'foo' ],
+  arguments: ['foo'],
   declarations: [{ 'font-size': '1rem' }],
 };
 
@@ -42,4 +44,4 @@ describe('Atrule Processor', () => {
     expect(processAtrule(testAttribute)).to.deep.equal(correct);
     expect(processAtrule(testAttribute2)).to.deep.equal(correct2);
   });
-})
+});
