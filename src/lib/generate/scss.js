@@ -7,6 +7,7 @@ import formatRule from 'formatters/rule';
 const tokenDirectoryName = 'components';
 export const mainFile = 'main.scss';
 export const variableFile = '_variables.scss';
+export const scssDirectory = 'scss';
 
 const atomicStructure = {
   atom: '1-Atoms',

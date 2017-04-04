@@ -3,7 +3,7 @@ import processAtrule from 'processors/atrule';
 
 const testAttribute = {
   value: [
-    { type: 'atkeyword', value: 'include' },
+    { type: 'atkeyword', value: 'import' },
     { type: 'identifier', value: 'media' },
     { type: 'arguments', value: ['foo'] },
     {
@@ -29,7 +29,7 @@ const testAttribute2 = {
 ]};
 
 const correct = {
-  keyword: '@include',
+  keyword: '@import',
   identifier: 'media',
   arguments: [ 'foo' ],
   declarations: [{ 'font-size': '1rem' }],

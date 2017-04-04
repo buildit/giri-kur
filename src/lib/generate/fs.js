@@ -24,7 +24,7 @@ export const fileEncodingType = filename => {
   return encoding;
 }
 
-const writeFiles = (filePackage, location) => {
+const writeFiles = (filePackage, location = '') => {
   Object.keys(filePackage).forEach(filename => {
     const fullFilePath = path.resolve(location, filename);
     log(`Writing ${filename}`);

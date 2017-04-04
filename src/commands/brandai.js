@@ -3,7 +3,12 @@ import createQueryWrapper from 'query-ast';
 
 import https from 'https';
 
-import { downloadBrandAiVariables } from 'lib/download';
+import {
+  downloadBrandAiVariables,
+  downloadBrandAiImages,
+  downloadBrandAiIcons,
+  downloadBrandAiLogos,
+} from 'lib/download';
 import processorHelp from 'lib/help';
 import generateRulePackages from 'lib/generate/rulePackages';
 import readin, { readinWithFilenames } from 'lib/readin';
@@ -16,7 +21,7 @@ import path from 'path';
 import changeCase from 'change-case';
 import fingerprint from 'fingerprinting';
 
-import { mainFile, variableFile } from 'lib/generate/scss';
+import { mainFile, variableFile, scssDirectory } from 'lib/generate/scss';
 
 import formatAtrule from 'formatters/atrule';
 import formatGlobal from 'formatters/global';
@@ -78,9 +83,13 @@ const incorporateBrandAiData = originalData => {
   console.log(globals);
 }
 
-const retrieveBrandAiConfig = () => (
-  incorporateBrandAiData(downloadBrandAiVariables('monksp-buildit', 'primary-brand', 'Bko6hpr5g'))
-)
+const retrieveBrandAiConfig = (account, brand, key) => {
+  const variableData = downloadBrandAiVariables(account, brand, key);
+  const imagesDir = downloadBrandAiImages(account, brand, key);
+  const logosDir = downloadBrandAiLogos(account, brand, key);
+  const iconsDir = downloadBrandAiIcons(account, brand, key);
+  return { variableData, imagesDir, logosDir, iconsDir };
+}
 
 const addBrandAiToMain = main => {
   let alreadyIncluded = false;
@@ -97,23 +106,16 @@ const addBrandAiToMain = main => {
 };
 
 const openMainScssFile = () => {
-  const contents = readin(`${options.dest}/scss/${mainFile}`);
+  const contents = readin(`${options.dest}/${scssDirectory}/${mainFile}`);
   const { whatever: parsed } = processTreeToData(parseSource(contents[0]));
   return parsed;
 };
 
 const openGlobalScssFile = () => {
-  const contents = readin(`${options.dest}/scss/${variableFile}`);
+  const contents = readin(`${options.dest}/${scssDirectory}/${variableFile}`);
   const { globals } = processTreeToData(parseSource(contents[0]));
   return globals;
 }
-const openFilesDirectory = fileType => {
-  const files = readinWithFilenames(`raw/tmp/${fileType}_package`);
-  return files;
-}
-const openImageDirectory = () => openFilesDirectory('images');
-const openIconDirectory = () => openFilesDirectory('icons');
-const openLogoDirectory = () => openFilesDirectory('logos');
 
 const processFiles = (files, type) => {
   const BRANDAI_PREFIX = `brandai-${type}-`;
@@ -151,29 +153,40 @@ const writeAssetFiles = (files, type) => {
 
   return newGlobals;
 };
-const incorporateFiles = (assets, type) => {
+
+const openFilesDirectory = directory => (readinWithFilenames(directory))
+const incorporateFiles = (directory, type) => {
+  const assets = openFilesDirectory(directory);
   const files = processFiles(assets, type);
   return writeAssetFiles(files, type);
 };
 
-const incorporateImages = () => (incorporateFiles(openImageDirectory(), 'images'));
-const incorporateIcons = () => (incorporateFiles(openIconDirectory(), 'icons'));
-const incorporateLogos = () => (incorporateFiles(openLogoDirectory(), 'logos'));
+const incorporateImages = (directory) => (incorporateFiles(directory, 'images'));
+const incorporateIcons = (directory) => (incorporateFiles(directory, 'icons'));
+const incorporateLogos = (directory) => (incorporateFiles(directory, 'logos'));
 
 // if (options.help || !options.src || !options.dest) {
 //   processorHelp();
 // } else {
   processOptions(options);
-  // retrieveBrandAiConfig();
+  const config = retrieveBrandAiConfig('monksp-buildit', 'primary-brand', 'Bko6hpr5g');
 
-  // const parsedMain = openMainScssFile();
-  // const updated = addBrandAiToMain(parsedMain);
-  // writeFiles({'main.scss': updated.map(p => formatAtrule(p)).join('\n')}, path.join('./dest/scss'));
+  const parsedMain = openMainScssFile();
+  const updated = addBrandAiToMain(parsedMain);
 
   const globals = Object.assign(...openGlobalScssFile());
 
-  Object.assign(globals, incorporateImages(), incorporateIcons(), incorporateLogos());
+  Object.assign(
+    globals,
+    incorporateImages(config.imagesDir),
+    incorporateIcons(config.iconsDir),
+    incorporateLogos(config.logosDir),
+  );
 
-  writeFiles({ '_variables.scss': formatGlobal(globals).join('\n') }, './dest/scss')
+  writeFiles({
+    'main.scss': updated.map(p => formatAtrule(p)).join('\n'),
+    '_variables.scss': formatGlobal(globals).join('\n'),
+    '_style-params.scss': config.variableData,
+  }, './dest/${scssDirectory}')
   display.debug(formatGlobal(globals));
 // }
