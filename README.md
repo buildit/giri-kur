@@ -2,7 +2,7 @@ Giri-kur
 
 ![Giri kur: Sumerian for "to change"](http://psd.museum.upenn.edu/epsd/psl/img/thumb/Okjz.png)
 
-SCSS->Design Token processor
+Pile of SCSS -> More sane SCSS processor
 
 # Things you can do
 * `npm run doc` Generates esdoc and opens your browser to look at it.
