@@ -28,8 +28,9 @@ destination
   ↳ scss
     ↳ main.scss
       _variables.scss
-    ↳ 1-Atoms
-      ↳ some-atom.scss
+    ↳ components
+      ↳ 1-Atoms
+        ↳ some-atom.scss
 ```
 
 `incorporate-brandai` expects the folder structure defined in `create-scss-from-raw`, but the only
