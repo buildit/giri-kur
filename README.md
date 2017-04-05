@@ -23,12 +23,14 @@ This was built using yarn as package manager, but there should be no issue just 
 the contents of any other files, the resulting output can be unpredictable.  It will output in the
 following structure:
 
-  _specified destination_
-    ➥ scss
-      ➥ main.scss
-        _variables.scss
-      ➥ 1-Atoms
-        ➥ some-atom.scss
+```
+destination
+  ↳ scss
+    ↳ main.scss
+      _variables.scss
+    ↳ 1-Atoms
+      ↳ some-atom.scss
+```
 
 `incorporate-brandai` expects the folder structure defined in `create-scss-from-raw`, but the only
 required files are `main.scss` and `_variables.scss`.
