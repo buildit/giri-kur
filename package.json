@@ -1,5 +1,5 @@
 {
-  "name": "Giri-kur",
+  "name": "giri-kur",
   "version": "1.0.0",
   "description": "An SCSS->Design Token processor",
   "main": "index.js",
